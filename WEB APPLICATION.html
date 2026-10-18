@@ -1,0 +1,1165 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JREFF MRUE - Official Pageant Portal</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        obsidian: '#070709',
+                        surfaceDark: '#0e0e12',
+                        rubyRed: '#e11d48',
+                        crimsonAccent: '#9f1239'
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #050508;
+            color: #f4f4f5;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-image: 
+                radial-gradient(ellipse at 50% -20%, rgba(225, 29, 72, 0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 100%, rgba(159, 18, 57, 0.08) 0%, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        h1, h2, h3, .font-display {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .luxury-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(18, 18, 24, 0.75) 100%);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .luxury-card:hover {
+            border-color: rgba(225, 29, 72, 0.35);
+            transform: translateY(-2px);
+        }
+
+        .luxury-header {
+            background: rgba(7, 7, 9, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .luxury-nav {
+            background: rgba(14, 14, 18, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
+        }
+
+        .btn-ruby {
+            background: linear-gradient(135deg, #e11d48 0%, #9f1239 100%);
+            color: #ffffff;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            transition: all 0.25s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 20px -6px rgba(225, 29, 72, 0.4);
+        }
+
+        .btn-ruby:hover {
+            background: linear-gradient(135deg, #f43f5e 0%, #be123c 100%);
+            box-shadow: 0 12px 25px -4px rgba(225, 29, 72, 0.6);
+            transform: translateY(-1px);
+        }
+
+        .modern-input {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+            border-radius: 0.85rem;
+            padding: 0.75rem 1rem;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+        }
+
+        .modern-input:focus {
+            outline: none;
+            border-color: #e11d48;
+            background: rgba(0, 0, 0, 0.75);
+        }
+
+        .catalog-tab-active {
+            background: linear-gradient(135deg, #e11d48 0%, #9f1239 100%) !important;
+            color: #ffffff !important;
+            border-color: rgba(255, 255, 255, 0.3) !important;
+            box-shadow: 0 4px 15px rgba(225, 29, 72, 0.5) !important;
+        }
+
+        .catalog-tab-inactive {
+            background: rgba(255, 255, 255, 0.05) !important;
+            color: #a1a1aa !important;
+            border-color: rgba(255, 255, 255, 0.1) !important;
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050508;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #27272a;
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-32 antialiased selection:bg-rose-600 selection:text-white">
+
+    <!-- TOP BAR / HEADER -->
+    <header class="sticky top-0 z-50 luxury-header px-5 py-4 max-w-md mx-auto flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-2xl bg-gradient-to-tr from-rose-600 to-rose-400 text-white font-black text-xs flex items-center justify-center tracking-tighter shadow-md border border-white/20">
+                JM
+            </div>
+            <div>
+                <span class="text-xs font-extrabold tracking-widest uppercase text-white block leading-none font-display">JREFF MRUE</span>
+                <span class="text-[9px] text-rose-400/90 tracking-wider font-semibold uppercase">Official Pageant Portal</span>
+            </div>
+        </div>
+        <button onclick="openAdminModal()" class="text-[11px] bg-white/5 hover:bg-white/10 text-zinc-300 px-3.5 py-1.5 rounded-full border border-white/10 transition flex items-center space-x-2 font-medium">
+            <i class="fa-solid fa-shield-halved text-rose-500 text-[10px]"></i>
+            <span>Admin</span>
+        </button>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-md mx-auto p-4 space-y-6">
+
+        <!-- 1. HOME SECTION -->
+        <section id="sec-home" class="space-y-5">
+            <div class="relative rounded-3xl overflow-hidden luxury-card border border-white/10 group">
+                <img id="home-ad-img" src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80" alt="Banner" class="w-full h-56 object-cover opacity-80 group-hover:scale-105 transition duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent p-6 flex flex-col justify-end space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[9px] uppercase font-black tracking-widest text-white bg-rose-600/90 backdrop-blur-md px-3 py-1 rounded-full shadow-sm border border-rose-400/30">Official Banner</span>
+                        <span class="text-[10px] text-zinc-400 font-mono" id="ad-status-tag">Active</span>
+                    </div>
+                    <h2 id="home-ad-title" class="text-xl font-extrabold text-white tracking-tight leading-snug font-display">JREFF MRUE Grand Coronation Season 2026</h2>
+                    <p id="home-ad-desc" class="text-xs text-zinc-300 line-clamp-2 leading-relaxed">Welcome to the official voting and delegate registration portal for JREFF MRUE.</p>
+                </div>
+            </div>
+
+            <div class="luxury-card rounded-3xl p-6 space-y-5">
+                <div class="flex justify-between items-center text-xs border-b border-white/10 pb-3">
+                    <span class="text-zinc-400 font-extrabold uppercase tracking-widest text-[10px]">Voting Countdown</span>
+                    <div class="flex items-center space-x-2 bg-rose-950/40 border border-rose-800/30 px-3 py-1 rounded-full">
+                        <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+                        <span class="text-white font-mono text-[11px] font-bold" id="home-countdown-display">00d 00h 00m 00s</span>
+                    </div>
+                </div>
+                
+                <div class="space-y-2" id="home-leaderboard-preview">
+                    <div class="text-center py-6 text-xs text-zinc-500 italic flex flex-col items-center justify-center space-y-2">
+                        <i class="fa-solid fa-trophy text-zinc-700 text-2xl"></i>
+                        <span>Voting leaderboard will display when candidates are approved.</span>
+                    </div>
+                </div>
+
+                <button onclick="navigateTo('vote')" class="w-full btn-ruby py-3.5 rounded-2xl text-xs uppercase tracking-widest transition flex items-center justify-center space-x-2">
+                    <span>Enter Voting Arena</span>
+                    <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- 2. APPLICATION SECTION -->
+        <section id="sec-apply" class="hidden space-y-5">
+            <div class="space-y-1">
+                <h2 class="text-2xl font-black tracking-tight text-white uppercase font-display">Delegate Application</h2>
+                <p class="text-xs text-zinc-400 leading-relaxed">Choose an available country button below to lock your seat permanently for this season.</p>
+            </div>
+
+            <div class="space-y-2">
+                <label class="text-[10px] text-rose-400 font-extrabold uppercase tracking-widest">Select Available Country</label>
+                <!-- Country Buttons Grid Container -->
+                <div id="country-buttons-grid" class="grid grid-cols-2 gap-3 min-h-[80px]"></div>
+            </div>
+
+            <form id="application-form" onsubmit="handleApplicationSubmit(event)" class="luxury-card rounded-3xl p-6 space-y-4">
+                <div class="flex justify-between items-center pb-3 border-b border-white/10">
+                    <h3 class="text-xs font-bold text-white uppercase tracking-wider flex items-center space-x-2">
+                        <i class="fa-solid fa-user-check text-rose-500"></i>
+                        <span>Applicant Registration</span>
+                    </h3>
+                    <span id="form-selected-badge" class="text-[10px] bg-white/5 text-zinc-400 px-3 py-1 rounded-full border border-white/10 font-mono">No Country Selected</span>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Candidate Full Name</label>
+                    <input type="text" id="app-candidate-name" required placeholder="e.g. Maria Santos" class="w-full modern-input">
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Email Address</label>
+                    <input type="email" id="app-email" required placeholder="candidate@example.com" class="w-full modern-input">
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Discord Handle</label>
+                    <input type="text" id="app-discord" required placeholder="username#0000" class="w-full modern-input">
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Roblox Username</label>
+                    <input type="text" id="app-roblox" required placeholder="RobloxUsername" class="w-full modern-input">
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Official Headshot Image</label>
+                    <input type="file" id="app-file" required accept="image/*" class="w-full text-xs text-zinc-400 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-[11px] file:font-bold file:bg-rose-600 file:text-white hover:file:bg-rose-500 cursor-pointer bg-black/50 border border-white/10 rounded-2xl">
+                </div>
+
+                <button type="submit" class="w-full btn-ruby py-3.5 rounded-2xl text-xs uppercase tracking-widest transition mt-2">
+                    Submit & Lock Delegate Seat
+                </button>
+            </form>
+        </section>
+
+        <!-- 3. ANNOUNCEMENTS SECTION -->
+        <section id="sec-announcements" class="hidden space-y-5">
+            <div class="flex justify-between items-center">
+                <h2 class="text-2xl font-black tracking-tight text-white uppercase font-display">Announcements</h2>
+                <span class="text-[10px] text-rose-400 uppercase tracking-widest font-mono">Live Broadcasts</span>
+            </div>
+            <div id="announcement-feed" class="space-y-4">
+                <div class="text-center py-12 luxury-card rounded-3xl text-xs text-zinc-500 italic space-y-2">
+                    <i class="fa-solid fa-bullhorn text-zinc-700 text-2xl block"></i>
+                    <span>No official broadcasts posted yet.</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. CALENDAR SECTION -->
+        <section id="sec-calendar" class="hidden space-y-5">
+            <div class="flex justify-between items-center">
+                <h2 class="text-2xl font-black tracking-tight text-white uppercase font-display">Schedule</h2>
+                
+                <div class="flex items-center space-x-2 bg-white/5 p-1 rounded-2xl border border-white/10">
+                    <button onclick="changeCalendarMonth(-1)" class="w-8 h-8 rounded-xl bg-white/5 text-white flex items-center justify-center hover:bg-rose-600 transition text-xs">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <span id="calendar-month-header" class="text-xs font-bold text-white font-mono px-2">October 2026</span>
+                    <button onclick="changeCalendarMonth(1)" class="w-8 h-8 rounded-xl bg-white/5 text-white flex items-center justify-center hover:bg-rose-600 transition text-xs">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="luxury-card rounded-3xl p-6 space-y-4">
+                <div class="grid grid-cols-7 gap-2 text-center text-xs">
+                    <span class="text-rose-400 font-extrabold text-[10px] uppercase">Mo</span>
+                    <span class="text-rose-400 font-extrabold text-[10px] uppercase">Tu</span>
+                    <span class="text-rose-400 font-extrabold text-[10px] uppercase">We</span>
+                    <span class="text-rose-400 font-extrabold text-[10px] uppercase">Th</span>
+                    <span class="text-rose-400 font-extrabold text-[10px] uppercase">Fr</span>
+                    <span class="text-rose-400 font-extrabold text-[10px] uppercase">Sa</span>
+                    <span class="text-rose-400 font-extrabold text-[10px] uppercase">Su</span>
+                </div>
+                <!-- Dynamic Days Grid Container -->
+                <div id="calendar-days-grid" class="grid grid-cols-7 gap-2 text-center text-xs"></div>
+            </div>
+
+            <div class="space-y-3">
+                <h3 class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Events Timeline</h3>
+                <div id="calendar-events-timeline" class="space-y-2">
+                    <p class="text-xs text-zinc-600 italic py-2">No events scheduled for this month.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. GALLERY SECTION -->
+        <section id="sec-headshots" class="hidden space-y-5">
+            <div class="flex justify-between items-center">
+                <h2 class="text-2xl font-black tracking-tight text-white uppercase font-display">Delegates</h2>
+                <span class="text-[10px] text-rose-400 font-mono uppercase tracking-wider">Approved Candidates</span>
+            </div>
+            <div id="headshots-gallery-grid" class="grid grid-cols-2 gap-3">
+                <div class="col-span-2 text-center py-12 luxury-card rounded-3xl text-xs text-zinc-500 italic space-y-2">
+                    <i class="fa-solid fa-images text-zinc-700 text-2xl block"></i>
+                    <span>No approved candidates available yet.</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. VOTING SECTION -->
+        <section id="sec-vote" class="hidden space-y-5">
+            <div class="luxury-card rounded-3xl p-6 text-center space-y-4">
+                <div class="w-12 h-12 mx-auto rounded-2xl bg-gradient-to-tr from-rose-600 to-rose-400 text-white font-black text-sm flex items-center justify-center border border-white/20">JM</div>
+                <div>
+                    <h3 class="font-black text-white text-base uppercase tracking-wider font-display">Official Pageant Arena</h3>
+                    <p class="text-xs text-zinc-400 mt-0.5">Cast official votes for your favorite delegate</p>
+                </div>
+
+                <div class="bg-black/40 border border-white/10 rounded-2xl p-3 flex justify-between items-center">
+                    <span class="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Voting Window</span>
+                    <span id="active-voting-timer" class="text-xs font-mono font-bold text-white tracking-widest">00d : 00h : 00m : 00s</span>
+                </div>
+                
+                <div id="catalog-buttons-bar" class="flex space-x-2 pt-1 overflow-x-auto justify-center">
+                    <button onclick="switchCatalog('headshot')" id="cat-btn-headshot" class="catalog-tab-active text-xs font-bold px-4 py-2 rounded-xl shrink-0 transition duration-300">Headshot Vote</button>
+                    <button onclick="switchCatalog('peoples')" id="cat-btn-peoples" class="catalog-tab-inactive text-xs font-bold px-4 py-2 rounded-xl shrink-0 transition duration-300">People's Choice</button>
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <h3 class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Leaderboard (<span id="active-catalog-title">Headshot Vote</span>)</h3>
+                <div id="voting-leaderboard-top" class="luxury-card rounded-2xl p-4 space-y-2">
+                    <div class="text-xs text-zinc-500 italic text-center py-2">Leaderboard will update live as votes are submitted.</div>
+                </div>
+            </div>
+
+            <div id="voting-candidates-container" class="space-y-4">
+                <div class="text-center py-12 luxury-card rounded-3xl text-xs text-zinc-500 italic space-y-2">
+                    <i class="fa-solid fa-box-archive text-zinc-700 text-2xl block"></i>
+                    <span>No active candidates available for voting.</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. SUPPORT SECTION -->
+        <section id="sec-feedback" class="hidden space-y-5">
+            <h2 class="text-2xl font-black tracking-tight text-white uppercase font-display">Support & Reports</h2>
+            <form onsubmit="handleFeedbackSubmit(event)" class="luxury-card rounded-3xl p-6 space-y-4">
+                <div class="space-y-1">
+                    <label class="text-xs text-zinc-300 font-semibold uppercase tracking-wider">Submission Type</label>
+                    <select id="fb-type" class="w-full modern-input">
+                        <option value="Feedback">General Feedback</option>
+                        <option value="Report">Report Violation</option>
+                    </select>
+                </div>
+                <div class="space-y-1">
+                    <label class="text-xs text-zinc-300 font-semibold uppercase tracking-wider">Details</label>
+                    <textarea id="fb-message" rows="4" required placeholder="Type your inquiry or issue report here..." class="w-full modern-input"></textarea>
+                </div>
+                <button type="submit" class="w-full btn-ruby py-3.5 rounded-2xl text-xs uppercase tracking-widest transition">
+                    Submit Message
+                </button>
+            </form>
+        </section>
+
+    </main>
+
+    <!-- BOTTOM FLOATING NAVIGATION BAR -->
+    <div class="fixed bottom-4 left-0 right-0 max-w-md mx-auto px-4 z-40">
+        <nav class="luxury-nav rounded-full px-3 py-2.5 flex justify-around items-center text-[10px]">
+            <button onclick="navigateTo('home')" id="nav-home" class="nav-btn text-rose-500 flex flex-col items-center space-y-1 transition">
+                <i class="fa-solid fa-house text-base"></i>
+                <span class="font-bold">Home</span>
+            </button>
+            <button onclick="navigateTo('apply')" id="nav-apply" class="nav-btn text-zinc-400 hover:text-white flex flex-col items-center space-y-1 transition">
+                <i class="fa-solid fa-pen-to-square text-base"></i>
+                <span>Apply</span>
+            </button>
+            <button onclick="navigateTo('announcements')" id="nav-announcements" class="nav-btn text-zinc-400 hover:text-white flex flex-col items-center space-y-1 transition">
+                <i class="fa-solid fa-bullhorn text-base"></i>
+                <span>Updates</span>
+            </button>
+            <button onclick="navigateTo('calendar')" id="nav-calendar" class="nav-btn text-zinc-400 hover:text-white flex flex-col items-center space-y-1 transition">
+                <i class="fa-solid fa-calendar-days text-base"></i>
+                <span>Events</span>
+            </button>
+            <button onclick="navigateTo('headshots')" id="nav-headshots" class="nav-btn text-zinc-400 hover:text-white flex flex-col items-center space-y-1 transition">
+                <i class="fa-solid fa-image text-base"></i>
+                <span>Gallery</span>
+            </button>
+            <button onclick="navigateTo('vote')" id="nav-vote" class="nav-btn text-zinc-400 hover:text-white flex flex-col items-center space-y-1 transition">
+                <i class="fa-solid fa-check-to-slot text-base"></i>
+                <span>Vote</span>
+            </button>
+            <button onclick="navigateTo('feedback')" id="nav-feedback" class="nav-btn text-zinc-400 hover:text-white flex flex-col items-center space-y-1 transition">
+                <i class="fa-solid fa-headset text-base"></i>
+                <span>Support</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- CALENDAR MODAL -->
+    <div id="calendar-modal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="luxury-card rounded-3xl p-6 max-w-sm w-full space-y-4 shadow-2xl">
+            <div class="flex justify-between items-center border-b border-white/10 pb-3">
+                <span id="modal-date-tag" class="text-[10px] bg-rose-600 text-white font-extrabold px-3 py-1 rounded-full font-mono">Date</span>
+                <button onclick="closeCalendarModal()" class="text-zinc-500 hover:text-white"><i class="fa-solid fa-xmark text-base"></i></button>
+            </div>
+            <h3 id="modal-event-title" class="font-extrabold text-white text-base font-display">Event Title</h3>
+            <p id="modal-event-desc" class="text-xs text-zinc-400 leading-relaxed">Description goes here.</p>
+            <button onclick="closeCalendarModal()" class="w-full btn-ruby py-3 rounded-2xl text-xs uppercase tracking-widest">Close</button>
+        </div>
+    </div>
+
+    <!-- MASTER ADMIN PANEL MODAL -->
+    <div id="admin-modal" class="hidden fixed inset-0 bg-black/95 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="luxury-card rounded-3xl p-6 max-w-md w-full space-y-5 shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center pb-3 border-b border-white/10">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-shield-halved text-rose-500 text-base"></i>
+                    <h3 class="font-extrabold text-white text-sm tracking-wider uppercase font-display">Master Control Panel</h3>
+                </div>
+                <button onclick="closeAdminModal()" class="text-zinc-500 hover:text-white"><i class="fa-solid fa-xmark text-base"></i></button>
+            </div>
+
+            <div id="admin-auth-box" class="space-y-4">
+                <p class="text-xs text-zinc-400 leading-relaxed">Enter your registered admin email handle to unlock master controls.</p>
+                <div class="space-y-1">
+                    <label class="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Admin Handle</label>
+                    <input type="email" id="admin-email-input" placeholder="Enter admin email handle" class="w-full modern-input">
+                </div>
+                <button onclick="verifyAdminLogin()" class="w-full btn-ruby py-3.5 rounded-2xl text-xs uppercase tracking-widest">Authenticate Access</button>
+            </div>
+
+            <div id="admin-dashboard-content" class="hidden space-y-6">
+
+                <!-- 1. Manage Countries -->
+                <div class="space-y-3 bg-black/40 p-4 rounded-2xl border border-white/10">
+                    <h4 class="text-xs font-black text-white uppercase tracking-wider flex justify-between items-center">
+                        <span>1. Countries List</span>
+                        <span id="admin-country-count" class="text-[10px] bg-rose-950 text-rose-400 px-2 py-0.5 rounded border border-rose-900/40">0 Total</span>
+                    </h4>
+                    <div class="flex space-x-2">
+                        <input type="text" id="new-country-name" placeholder="e.g. THAILAND" class="w-full modern-input">
+                        <button onclick="addCountryFromAdmin()" class="btn-ruby px-4 py-2 rounded-xl text-xs shrink-0">+ Add</button>
+                    </div>
+                    <div id="admin-country-list" class="space-y-2 pt-1 max-h-36 overflow-y-auto"></div>
+                </div>
+
+                <!-- 2. Manage Applications -->
+                <div class="space-y-3 bg-black/40 p-4 rounded-2xl border border-white/10">
+                    <h4 class="text-xs font-black text-white uppercase tracking-wider flex justify-between items-center">
+                        <span>2. Delegate Applications</span>
+                        <span id="admin-total-apps" class="text-[10px] bg-rose-950 text-rose-400 px-2 py-0.5 rounded border border-rose-900/40">0 Apps</span>
+                    </h4>
+                    <div id="admin-applicants-list" class="space-y-2 max-h-48 overflow-y-auto text-xs">
+                        <p class="text-zinc-600 italic text-center py-2">No applications submitted yet.</p>
+                    </div>
+                </div>
+
+                <!-- 3. Timer Schedule -->
+                <div class="space-y-3 bg-black/40 p-4 rounded-2xl border border-white/10">
+                    <h4 class="text-xs font-black text-white uppercase tracking-wider">3. Set Voting Close Time</h4>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="text-[10px] text-zinc-400 uppercase font-bold">Closing Date</label>
+                            <input type="date" id="admin-timer-date" class="w-full modern-input mt-1">
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-zinc-400 uppercase font-bold">Closing Time</label>
+                            <input type="time" id="admin-timer-time" class="w-full modern-input mt-1">
+                        </div>
+                    </div>
+                    <button onclick="saveVotingTimerFromAdmin()" class="w-full btn-ruby py-2.5 rounded-xl text-xs uppercase tracking-wider mt-1">Save Timer</button>
+                </div>
+
+                <!-- 4. Calendar Events -->
+                <div class="space-y-3 bg-black/40 p-4 rounded-2xl border border-white/10">
+                    <h4 class="text-xs font-black text-white uppercase tracking-wider">4. Add Calendar Event</h4>
+                    <div class="space-y-2">
+                        <input type="text" id="event-title-input" placeholder="Event Title" class="w-full modern-input">
+                        <input type="text" id="event-desc-input" placeholder="Event Description" class="w-full modern-input">
+                        <div>
+                            <label class="text-[10px] text-zinc-400 uppercase font-bold">Event Date</label>
+                            <input type="date" id="event-date-input" class="w-full modern-input mt-1">
+                        </div>
+                        <button onclick="addCalendarEventFromAdmin()" class="w-full btn-ruby py-2.5 rounded-xl text-xs uppercase tracking-wider">Save Event</button>
+                    </div>
+                </div>
+
+                <!-- 5. Home Banner -->
+                <div class="space-y-3 bg-black/40 p-4 rounded-2xl border border-white/10">
+                    <h4 class="text-xs font-black text-white uppercase tracking-wider">5. Home Banner Content</h4>
+                    <div class="space-y-2">
+                        <input type="text" id="ad-title-input" placeholder="Banner Title" class="w-full modern-input">
+                        <input type="text" id="ad-desc-input" placeholder="Banner Description" class="w-full modern-input">
+                        <input type="text" id="ad-img-input" placeholder="Image URL (http://...)" class="w-full modern-input">
+                        <button onclick="updateAdBannerFromAdmin()" class="w-full btn-ruby py-2.5 rounded-xl text-xs uppercase tracking-wider">Update Banner</button>
+                    </div>
+                </div>
+
+                <!-- 6. Announcements -->
+                <div class="space-y-3 bg-black/40 p-4 rounded-2xl border border-white/10">
+                    <h4 class="text-xs font-black text-white uppercase tracking-wider">6. Post Announcement</h4>
+                    <div class="space-y-2">
+                        <input type="text" id="ann-title-input" placeholder="Announcement Title" class="w-full modern-input">
+                        <textarea id="ann-desc-input" rows="2" placeholder="Announcement Details" class="w-full modern-input"></textarea>
+                        <button onclick="postAnnouncementFromAdmin()" class="w-full btn-ruby py-2.5 rounded-xl text-xs uppercase tracking-wider">Publish</button>
+                    </div>
+                </div>
+
+                <!-- 7. RESET SYSTEM DATA -->
+                <div class="pt-2 border-t border-white/10">
+                    <button onclick="resetSystemData()" class="w-full bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800/40 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition">
+                        <i class="fa-solid fa-triangle-exclamation mr-1"></i> Reset All Data to Default
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT MASTER SYSTEM -->
+    <script>
+        const defaultCountries = [
+            { name: "PHILIPPINES", locked: false, applicant: null },
+            { name: "CHINA", locked: false, applicant: null },
+            { name: "JAPAN", locked: false, applicant: null },
+            { name: "KOREA", locked: false, applicant: null }
+        ];
+
+        let countriesList = defaultCountries;
+        try {
+            const savedCountries = localStorage.getItem('jreff_countries');
+            if (savedCountries) countriesList = JSON.parse(savedCountries);
+        } catch(e) { countriesList = defaultCountries; }
+
+        let applicantsList = [];
+        try { applicantsList = JSON.parse(localStorage.getItem('jreff_applicants')) || []; } catch(e) {}
+
+        let candidatesList = [];
+        try { candidatesList = JSON.parse(localStorage.getItem('jreff_candidates')) || []; } catch(e) {}
+
+        let announcementsList = [];
+        try { announcementsList = JSON.parse(localStorage.getItem('jreff_announcements')) || []; } catch(e) {}
+
+        let calendarEventsList = [];
+        try { calendarEventsList = JSON.parse(localStorage.getItem('jreff_calendar_events')) || []; } catch(e) {}
+
+        let bannerData = {
+            title: "JREFF MRUE Grand Coronation Season 2026",
+            desc: "Welcome to the official voting and delegate registration portal for JREFF MRUE.",
+            img: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80"
+        };
+        try {
+            const savedBanner = localStorage.getItem('jreff_banner');
+            if (savedBanner) bannerData = JSON.parse(savedBanner);
+        } catch(e) {}
+
+        let userHasVoted = { headshot: false, peoples: false };
+        try {
+            const savedVoted = localStorage.getItem('jreff_user_voted');
+            if (savedVoted) userHasVoted = JSON.parse(savedVoted);
+        } catch(e) {}
+
+        let votingCloseTimestamp = (Date.now() + 10 * 24 * 60 * 60 * 1000);
+        try {
+            const savedTimer = localStorage.getItem('jreff_voting_timer');
+            if (savedTimer) votingCloseTimestamp = parseInt(savedTimer);
+        } catch(e) {}
+
+        const ADMIN_SECRET_HANDLE = "g47608079@gmail.com";
+
+        function saveAllState() {
+            try {
+                localStorage.setItem('jreff_countries', JSON.stringify(countriesList));
+                localStorage.setItem('jreff_applicants', JSON.stringify(applicantsList));
+                localStorage.setItem('jreff_candidates', JSON.stringify(candidatesList));
+                localStorage.setItem('jreff_announcements', JSON.stringify(announcementsList));
+                localStorage.setItem('jreff_calendar_events', JSON.stringify(calendarEventsList));
+                localStorage.setItem('jreff_banner', JSON.stringify(bannerData));
+                localStorage.setItem('jreff_user_voted', JSON.stringify(userHasVoted));
+                localStorage.setItem('jreff_voting_timer', votingCloseTimestamp.toString());
+            } catch(e) {}
+        }
+
+        let activeCatalog = 'headshot';
+        let currentCalendarDate = new Date();
+
+        function navigateTo(secId) {
+            const sections = ['home', 'apply', 'announcements', 'calendar', 'headshots', 'vote', 'feedback'];
+            sections.forEach(s => {
+                const el = document.getElementById(`sec-${s}`);
+                const nav = document.getElementById(`nav-${s}`);
+                if(el) el.classList.add('hidden');
+                if(nav) {
+                    nav.classList.remove('text-rose-500');
+                    nav.classList.add('text-zinc-400');
+                }
+            });
+
+            const targetSec = document.getElementById(`sec-${secId}`);
+            const targetNav = document.getElementById(`nav-${secId}`);
+            if(targetSec) targetSec.classList.remove('hidden');
+            if(targetNav) {
+                targetNav.classList.remove('text-zinc-400');
+                targetNav.classList.add('text-rose-500');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        let activeSelectedCountry = null;
+
+        function renderCountryGrid() {
+            const container = document.getElementById('country-buttons-grid');
+            if (!container) return;
+            container.innerHTML = '';
+
+            countriesList.forEach(c => {
+                const isLocked = c.locked;
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.onclick = () => selectCountryForApp(c.name);
+                btn.className = isLocked 
+                    ? "p-4 rounded-2xl border border-white/5 bg-black/40 opacity-40 cursor-not-allowed flex items-center justify-between text-xs font-bold text-left text-zinc-600"
+                    : "p-4 rounded-2xl luxury-card flex items-center justify-between text-xs font-bold text-left text-white hover:border-rose-500 transition";
+
+                btn.innerHTML = `
+                    <span>${c.name}</span>
+                    <span class="text-[9px] ${isLocked ? 'bg-zinc-900 text-zinc-600' : 'bg-rose-600 text-white font-extrabold'} px-2.5 py-0.5 rounded-full uppercase">
+                        ${isLocked ? 'Locked' : 'Available'}
+                    </span>
+                `;
+                container.appendChild(btn);
+            });
+        }
+
+        function selectCountryForApp(countryName) {
+            const country = countriesList.find(c => c.name === countryName);
+            if(country && country.locked) {
+                alert(`The country ${countryName} is already locked!`);
+                return;
+            }
+            activeSelectedCountry = countryName;
+            document.getElementById('form-selected-badge').innerText = `Selected: ${countryName}`;
+            document.getElementById('form-selected-badge').className = "text-[10px] bg-rose-600 text-white font-extrabold px-3 py-1 rounded-full";
+        }
+
+        function handleApplicationSubmit(e) {
+            e.preventDefault();
+            if(!activeSelectedCountry) {
+                alert('Please select an available country button first!');
+                return;
+            }
+
+            const candidateName = document.getElementById('app-candidate-name').value.trim();
+            const email = document.getElementById('app-email').value.trim();
+            const discord = document.getElementById('app-discord').value.trim();
+            const roblox = document.getElementById('app-roblox').value.trim();
+            const fileInput = document.getElementById('app-file');
+
+            let imageUrl = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80";
+            if(fileInput.files && fileInput.files[0]) {
+                imageUrl = URL.createObjectURL(fileInput.files[0]);
+            }
+
+            const targetCountry = countriesList.find(c => c.name === activeSelectedCountry);
+            if(targetCountry) {
+                targetCountry.locked = true;
+                targetCountry.applicant = candidateName;
+            }
+
+            const appData = {
+                id: Date.now(),
+                candidateName,
+                country: activeSelectedCountry,
+                email,
+                discord,
+                roblox,
+                imageUrl
+            };
+            applicantsList.push(appData);
+
+            document.getElementById('application-form').reset();
+            activeSelectedCountry = null;
+            document.getElementById('form-selected-badge').innerText = "No Country Selected";
+            document.getElementById('form-selected-badge').className = "text-[10px] bg-white/5 text-zinc-400 px-3 py-1 rounded-full border border-white/10 font-mono";
+
+            saveAllState();
+            renderCountryGrid();
+            renderAdminDashboard();
+
+            alert(`Application submitted successfully! ${appData.country} is now locked.`);
+        }
+
+        function openAdminModal() {
+            document.getElementById('admin-modal').classList.remove('hidden');
+        }
+
+        function closeAdminModal() {
+            document.getElementById('admin-modal').classList.add('hidden');
+        }
+
+        function verifyAdminLogin() {
+            const inputVal = document.getElementById('admin-email-input').value.trim();
+            if(inputVal.toLowerCase() === ADMIN_SECRET_HANDLE.toLowerCase()) {
+                document.getElementById('admin-auth-box').classList.add('hidden');
+                document.getElementById('admin-dashboard-content').classList.remove('hidden');
+                renderAdminDashboard();
+            } else {
+                alert('Unauthorized admin email handle. Access denied.');
+            }
+        }
+
+        function renderAdminDashboard() {
+            const countryContainer = document.getElementById('admin-country-list');
+            document.getElementById('admin-country-count').innerText = `${countriesList.length} Total`;
+            countryContainer.innerHTML = '';
+
+            countriesList.forEach((c, idx) => {
+                countryContainer.innerHTML += `
+                    <div class="flex justify-between items-center bg-black/50 p-3 rounded-xl border border-white/10 text-xs">
+                        <span class="font-bold text-white">${c.name} ${c.locked ? '<span class="text-[9px] text-rose-400">(Locked)</span>' : ''}</span>
+                        <button onclick="removeCountryFromAdmin(${idx})" class="text-zinc-500 hover:text-white"><i class="fa-solid fa-trash-can"></i></button>
+                    </div>
+                `;
+            });
+
+            const appContainer = document.getElementById('admin-applicants-list');
+            document.getElementById('admin-total-apps').innerText = `${applicantsList.length} Apps`;
+            appContainer.innerHTML = '';
+
+            if(applicantsList.length === 0) {
+                appContainer.innerHTML = '<p class="text-zinc-600 italic text-center py-2">No applications submitted yet.</p>';
+            } else {
+                applicantsList.forEach((app) => {
+                    appContainer.innerHTML += `
+                        <div class="bg-black/50 p-3 rounded-xl space-y-2 border border-white/10">
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-white">${app.candidateName} (${app.country})</span>
+                                <button onclick="approveCandidate(${app.id})" class="text-[10px] bg-rose-600 text-white font-extrabold px-2.5 py-1 rounded-full">Approve Candidate</button>
+                            </div>
+                            <div class="text-[10px] text-zinc-400">Email: ${app.email} | Discord: ${app.discord} | Roblox: ${app.roblox}</div>
+                        </div>
+                    `;
+                });
+            }
+        }
+
+        function addCountryFromAdmin() {
+            const input = document.getElementById('new-country-name');
+            const name = input.value.trim().toUpperCase();
+            if(!name) return;
+            countriesList.push({ name, locked: false, applicant: null });
+            input.value = '';
+            saveAllState();
+            renderCountryGrid();
+            renderAdminDashboard();
+        }
+
+        function removeCountryFromAdmin(index) {
+            countriesList.splice(index, 1);
+            saveAllState();
+            renderCountryGrid();
+            renderAdminDashboard();
+        }
+
+        function approveCandidate(appId) {
+            const app = applicantsList.find(a => a.id === appId);
+            if(!app) return;
+
+            candidatesList.push({
+                id: app.id,
+                name: app.candidateName,
+                country: app.country,
+                imageUrl: app.imageUrl,
+                votes: { headshot: 0, peoples: 0 }
+            });
+
+            saveAllState();
+            renderHeadshotsGallery();
+            renderVotingSection();
+            alert(`Approved ${app.candidateName} (${app.country}) as official candidate!`);
+        }
+
+        function saveVotingTimerFromAdmin() {
+            const dateVal = document.getElementById('admin-timer-date').value;
+            const timeVal = document.getElementById('admin-timer-time').value;
+            if(!dateVal || !timeVal) {
+                alert('Please select both date and time.');
+                return;
+            }
+            votingCloseTimestamp = new Date(`${dateVal}T${timeVal}`).getTime();
+            saveAllState();
+            alert('Voting schedule saved!');
+        }
+
+        function addCalendarEventFromAdmin() {
+            const title = document.getElementById('event-title-input').value.trim();
+            const desc = document.getElementById('event-desc-input').value.trim();
+            const date = document.getElementById('event-date-input').value;
+
+            if(!title || !date) return;
+
+            calendarEventsList.push({ title, desc, date });
+            document.getElementById('event-title-input').value = '';
+            document.getElementById('event-desc-input').value = '';
+            document.getElementById('event-date-input').value = '';
+
+            saveAllState();
+            renderCalendarMatrix();
+            alert('Event added to calendar!');
+        }
+
+        function changeCalendarMonth(delta) {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + delta);
+            renderCalendarMatrix();
+        }
+
+        function renderCalendarMatrix() {
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth();
+
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            document.getElementById('calendar-month-header').innerText = `${monthNames[month]} ${year}`;
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const totalDays = new Date(year, month + 1, 0).getDate();
+
+            let startOffset = (firstDay === 0) ? 6 : firstDay - 1;
+
+            const matrix = document.getElementById('calendar-days-grid');
+            if (!matrix) return;
+            matrix.innerHTML = '';
+
+            for(let i = 0; i < startOffset; i++) {
+                const emptySpan = document.createElement('div');
+                emptySpan.className = "p-3 text-zinc-800 text-[11px]";
+                matrix.appendChild(emptySpan);
+            }
+
+            for(let day = 1; day <= totalDays; day++) {
+                const monthFormatted = (month + 1) < 10 ? `0${month + 1}` : (month + 1);
+                const dayFormatted = day < 10 ? `0${day}` : day;
+                const fullDateStr = `${year}-${monthFormatted}-${dayFormatted}`;
+
+                const eventForDay = calendarEventsList.find(e => e.date === fullDateStr);
+
+                const div = document.createElement('div');
+                div.className = eventForDay
+                    ? "p-3 bg-rose-600 text-white font-black rounded-2xl cursor-pointer shadow-md text-xs hover:bg-rose-500 transition text-center"
+                    : "p-3 luxury-card hover:bg-white/10 text-zinc-300 font-medium rounded-2xl cursor-pointer text-xs transition text-center";
+
+                div.innerText = day;
+
+                div.onclick = () => {
+                    if(eventForDay) {
+                        openCalendarModal(eventForDay.title, eventForDay.desc, `${monthNames[month]} ${day}, ${year}`);
+                    } else {
+                        openCalendarModal(`Date Selected: ${monthNames[month]} ${day}, ${year}`, 'No official pageant events scheduled for this day.', `${monthNames[month]} ${day}, ${year}`);
+                    }
+                };
+
+                matrix.appendChild(div);
+            }
+
+            renderCalendarEventsTimeline();
+        }
+
+        function renderCalendarEventsTimeline() {
+            const container = document.getElementById('calendar-events-timeline');
+            if(!container) return;
+            container.innerHTML = '';
+
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth() + 1;
+            const monthFormatted = month < 10 ? `0${month}` : month;
+
+            const currentMonthEvents = calendarEventsList.filter(e => e.date && e.date.startsWith(`${year}-${monthFormatted}`));
+
+            if(currentMonthEvents.length === 0) {
+                container.innerHTML = '<p class="text-xs text-zinc-600 italic py-2">No scheduled events added for this month.</p>';
+                return;
+            }
+
+            currentMonthEvents.forEach(ev => {
+                container.innerHTML += `
+                    <div class="luxury-card p-3.5 rounded-2xl flex justify-between items-center cursor-pointer" onclick="openCalendarModal('${ev.title}', '${ev.desc}', '${ev.date}')">
+                        <div>
+                            <h4 class="font-bold text-white text-xs">${ev.title}</h4>
+                            <p class="text-[10px] text-zinc-400">${ev.desc}</p>
+                        </div>
+                        <span class="text-[10px] bg-rose-950 text-rose-400 border border-rose-900/40 px-2.5 py-1 rounded-full font-mono">${ev.date}</span>
+                    </div>
+                `;
+            });
+        }
+
+        function updateAdBannerFromAdmin() {
+            const title = document.getElementById('ad-title-input').value.trim();
+            const desc = document.getElementById('ad-desc-input').value.trim();
+            const img = document.getElementById('ad-img-input').value.trim();
+
+            if(title) bannerData.title = title;
+            if(desc) bannerData.desc = desc;
+            if(img) bannerData.img = img;
+
+            saveAllState();
+            applyBannerDataUI();
+            alert('Home banner updated!');
+        }
+
+        function applyBannerDataUI() {
+            if(document.getElementById('home-ad-title')) document.getElementById('home-ad-title').innerText = bannerData.title;
+            if(document.getElementById('home-ad-desc')) document.getElementById('home-ad-desc').innerText = bannerData.desc;
+            if(document.getElementById('home-ad-img')) document.getElementById('home-ad-img').src = bannerData.img;
+        }
+
+        function postAnnouncementFromAdmin() {
+            const title = document.getElementById('ann-title-input').value.trim();
+            const desc = document.getElementById('ann-desc-input').value.trim();
+            if(!title || !desc) return;
+
+            announcementsList.push({ title, desc, date: new Date().toLocaleDateString() });
+            document.getElementById('ann-title-input').value = '';
+            document.getElementById('ann-desc-input').value = '';
+
+            saveAllState();
+            renderAnnouncements();
+            alert('Announcement published!');
+        }
+
+        function renderAnnouncements() {
+            const feed = document.getElementById('announcement-feed');
+            if(!feed) return;
+            feed.innerHTML = '';
+
+            if(announcementsList.length === 0) {
+                feed.innerHTML = '<div class="text-center py-12 luxury-card rounded-3xl text-xs text-zinc-500 italic">No official broadcasts posted yet.</div>';
+                return;
+            }
+
+            announcementsList.forEach(item => {
+                feed.innerHTML += `
+                    <div class="luxury-card rounded-3xl p-5 space-y-2">
+                        <h4 class="font-extrabold text-white text-sm font-display">${item.title}</h4>
+                        <p class="text-xs text-zinc-400 leading-relaxed">${item.desc}</p>
+                        <span class="text-[10px] text-zinc-600 block pt-1 border-t border-white/5 font-mono">${item.date}</span>
+                    </div>
+                `;
+            });
+        }
+
+        function renderHeadshotsGallery() {
+            const grid = document.getElementById('headshots-gallery-grid');
+            if(!grid) return;
+            grid.innerHTML = '';
+
+            if(candidatesList.length === 0) {
+                grid.innerHTML = '<div class="col-span-2 text-center py-12 luxury-card rounded-3xl text-xs text-zinc-500 italic">No approved candidates available yet.</div>';
+                return;
+            }
+
+            candidatesList.forEach(cand => {
+                grid.innerHTML += `
+                    <div class="luxury-card rounded-3xl overflow-hidden p-3 space-y-2.5">
+                        <img src="${cand.imageUrl}" class="w-full h-44 object-cover rounded-2xl" alt="Headshot">
+                        <div class="space-y-1">
+                            <div class="text-xs font-bold text-white flex justify-between items-center">
+                                <span>${cand.name}</span>
+                                <span class="text-[9px] bg-rose-950 text-rose-400 border border-rose-900/40 px-2 py-0.5 rounded-full">${cand.country}</span>
+                            </div>
+                            <p class="text-[10px] text-zinc-500">Official Candidate</p>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function switchCatalog(cat) {
+            activeCatalog = cat;
+            const headBtn = document.getElementById('cat-btn-headshot');
+            const peopBtn = document.getElementById('cat-btn-peoples');
+            const titleSpan = document.getElementById('active-catalog-title');
+
+            if(cat === 'headshot') {
+                if(headBtn) headBtn.className = "catalog-tab-active text-xs font-bold px-4 py-2 rounded-xl shrink-0 transition duration-300";
+                if(peopBtn) peopBtn.className = "catalog-tab-inactive text-xs font-bold px-4 py-2 rounded-xl shrink-0 transition duration-300";
+                if(titleSpan) titleSpan.innerText = "Headshot Vote";
+            } else {
+                if(peopBtn) peopBtn.className = "catalog-tab-active text-xs font-bold px-4 py-2 rounded-xl shrink-0 transition duration-300";
+                if(headBtn) headBtn.className = "catalog-tab-inactive text-xs font-bold px-4 py-2 rounded-xl shrink-0 transition duration-300";
+                if(titleSpan) titleSpan.innerText = "People's Choice";
+            }
+
+            renderVotingSection();
+        }
+
+        function renderVotingSection() {
+            const container = document.getElementById('voting-candidates-container');
+            if(!container) return;
+            container.innerHTML = '';
+
+            if(candidatesList.length === 0) {
+                container.innerHTML = '<div class="text-center py-12 luxury-card rounded-3xl text-xs text-zinc-500 italic">No active candidates available for voting.</div>';
+                return;
+            }
+
+            const isAlreadyVoted = userHasVoted[activeCatalog];
+
+            candidatesList.forEach((cand) => {
+                const currentVotes = cand.votes ? (cand.votes[activeCatalog] || 0) : 0;
+                container.innerHTML += `
+                    <div class="luxury-card rounded-3xl overflow-hidden relative">
+                        <img src="${cand.imageUrl}" class="w-full h-80 object-cover" alt="Candidate">
+                        <div class="p-5 space-y-3 bg-gradient-to-t from-black via-black/80 to-transparent">
+                            <div>
+                                <span class="text-[10px] font-bold text-rose-400 uppercase tracking-widest">${cand.country}</span>
+                                <h4 class="text-lg font-black text-white font-display">${cand.name}</h4>
+                            </div>
+                            <div class="flex items-center justify-between pt-2 border-t border-white/10">
+                                <span class="text-xs font-mono text-zinc-300"><span id="vote-count-${cand.id}" class="font-bold text-white">${currentVotes}</span> votes</span>
+                                <button onclick="castVote(${cand.id})" ${isAlreadyVoted ? 'disabled' : ''} class="${isAlreadyVoted ? 'bg-zinc-800 text-zinc-500 cursor-not-allowed' : 'btn-ruby'} text-xs font-extrabold px-6 py-2.5 rounded-full transition">
+                                    ${isAlreadyVoted ? 'VOTED' : 'VOTE NOW'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            updateLeaderboardUI();
+        }
+
+        function castVote(candId) {
+            if(userHasVoted[activeCatalog]) {
+                alert('Nakahandog ka na ng iyong boto sa kategoryang ito! Isang boto lamang bawat user.');
+                return;
+            }
+
+            const cand = candidatesList.find(c => c.id === candId);
+            if(cand) {
+                if(!cand.votes) cand.votes = { headshot: 0, peoples: 0 };
+                cand.votes[activeCatalog] += 1;
+                userHasVoted[activeCatalog] = true;
+
+                saveAllState();
+                renderVotingSection();
+                alert(`Naitala na ang iyong boto para kay ${cand.name} sa ${activeCatalog === 'headshot' ? 'Headshot Vote' : "People's Choice"}!`);
+            }
+        }
+
+        function updateLeaderboardUI() {
+            const topBox = document.getElementById('voting-leaderboard-top');
+            const homePreview = document.getElementById('home-leaderboard-preview');
+
+            if(!topBox || candidatesList.length === 0) return;
+
+            const sorted = [...candidatesList].sort((a, b) => {
+                const vA = a.votes ? (a.votes[activeCatalog] || 0) : 0;
+                const vB = b.votes ? (b.votes[activeCatalog] || 0) : 0;
+                return vB - vA;
+            });
+
+            topBox.innerHTML = '';
+            if(homePreview) homePreview.innerHTML = '';
+
+            sorted.slice(0, 3).forEach((cand, idx) => {
+                const rankBadge = idx === 0 ? 'bg-amber-400 text-black' : idx === 1 ? 'bg-slate-300 text-black' : 'bg-amber-700 text-white';
+                const votesCount = cand.votes ? (cand.votes[activeCatalog] || 0) : 0;
+
+                topBox.innerHTML += `
+                    <div class="flex items-center justify-between bg-black/40 p-3 rounded-2xl border border-white/10">
+                        <div class="flex items-center space-x-3">
+                            <span class="w-6 h-6 rounded-full ${rankBadge} text-xs font-black flex items-center justify-center">${idx + 1}</span>
+                            <div>
+                                <div class="text-xs font-bold text-white">${cand.name} (${cand.country})</div>
+                                <div class="text-[10px] text-zinc-400 font-mono">${votesCount} votes</div>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-trophy ${idx === 0 ? 'text-amber-400' : 'text-zinc-600'} text-xs"></i>
+                    </div>
+                `;
+            });
+
+            if(sorted.length > 0 && homePreview) {
+                const top1 = sorted[0];
+                const top1Votes = top1.votes ? (top1.votes[activeCatalog] || 0) : 0;
+                homePreview.innerHTML = `
+                    <div class="bg-black/50 p-3.5 rounded-2xl border border-white/10 flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <span class="w-6 h-6 rounded-full bg-rose-600 text-white text-xs font-black flex items-center justify-center">1</span>
+                            <div>
+                                <div class="text-xs font-bold text-white">${top1.name} (${top1.country})</div>
+                                <div class="text-[10px] text-zinc-400 font-mono">${top1Votes} votes</div>
+                            </div>
+                        </div>
+                        <span class="text-[9px] bg-rose-950 text-rose-400 border border-rose-900/40 px-2 py-0.5 rounded-full uppercase font-mono">Rank #1</span>
+                    </div>
+                `;
+            }
+        }
+
+        setInterval(() => {
+            const now = Date.now();
+            const diff = votingCloseTimestamp - now;
+
+            const timerBox = document.getElementById('active-voting-timer');
+            const homeTimer = document.getElementById('home-countdown-display');
+
+            if(diff <= 0) {
+                if(timerBox) timerBox.innerText = "00d : 00h : 00m : 00s";
+                if(homeTimer) homeTimer.innerText = "Closed";
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            const timerStr = `${days < 10 ? '0'+days : days}d : ${hours < 10 ? '0'+hours : hours}h : ${minutes < 10 ? '0'+minutes : minutes}m : ${seconds < 10 ? '0'+seconds : seconds}s`;
+            if(timerBox) timerBox.innerText = timerStr;
+            if(homeTimer) homeTimer.innerText = `${days}d ${hours}h ${minutes}m`;
+        }, 1000);
+
+        function openCalendarModal(title, desc, dateTime) {
+            document.getElementById('modal-event-title').innerText = title;
+            document.getElementById('modal-event-desc').innerText = desc;
+            document.getElementById('modal-date-tag').innerText = dateTime;
+            document.getElementById('calendar-modal').classList.remove('hidden');
+        }
+
+        function closeCalendarModal() {
+            document.getElementById('calendar-modal').classList.add('hidden');
+        }
+
+        function handleFeedbackSubmit(e) {
+            e.preventDefault();
+            alert('Feedback submitted!');
+            document.getElementById('fb-message').value = '';
+        }
+
+        function resetSystemData() {
+            if(confirm('Sigurado ka bang gusto mong ireset ang lahat ng saved data pabalik sa simula? Mawawala ang lahat ng kasalukuyang boto at aplikasyon.')) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+
+        // DOM READY INITIALIZATION
+        window.addEventListener('DOMContentLoaded', () => {
+            applyBannerDataUI();
+            renderCountryGrid();
+            renderCalendarMatrix();
+            renderAnnouncements();
+            renderHeadshotsGallery();
+            renderVotingSection();
+        });
+    </script>
+</body>
+</html>
