@@ -1,4 +1,4 @@
-<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
@@ -157,8 +157,11 @@
         <!-- 1. HOME SECTION -->
         <section id="sec-home" class="space-y-5">
             <div class="relative rounded-3xl overflow-hidden luxury-card border border-white/10 group">
-                <img id="home-ad-img" src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80" alt="Banner" class="w-full h-56 object-cover opacity-80 group-hover:scale-105 transition duration-700">
-                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent p-6 flex flex-col justify-end space-y-2">
+                <!-- Banner Media Container (Image or Video) -->
+                <div id="home-ad-media-box">
+                    <img id="home-ad-img" src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80" alt="Banner" class="w-full h-56 object-cover opacity-80 group-hover:scale-105 transition duration-700">
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent p-6 flex flex-col justify-end space-y-2 pointer-events-none">
                     <div class="flex justify-between items-center">
                         <span class="text-[9px] uppercase font-black tracking-widest text-white bg-rose-600/90 backdrop-blur-md px-3 py-1 rounded-full shadow-sm border border-rose-400/30">Official Banner</span>
                         <span class="text-[10px] text-zinc-400 font-mono" id="ad-status-tag">Active</span>
@@ -200,7 +203,6 @@
 
             <div class="space-y-2">
                 <label class="text-[10px] text-rose-400 font-extrabold uppercase tracking-widest">Select Available Country</label>
-                <!-- Country Buttons Grid Container -->
                 <div id="country-buttons-grid" class="grid grid-cols-2 gap-3 min-h-[80px]"></div>
             </div>
 
@@ -284,7 +286,6 @@
                     <span class="text-rose-400 font-extrabold text-[10px] uppercase">Sa</span>
                     <span class="text-rose-400 font-extrabold text-[10px] uppercase">Su</span>
                 </div>
-                <!-- Dynamic Days Grid Container -->
                 <div id="calendar-days-grid" class="grid grid-cols-7 gap-2 text-center text-xs"></div>
             </div>
 
@@ -491,24 +492,33 @@
                     </div>
                 </div>
 
-                <!-- 5. Home Banner -->
+                <!-- 5. Home Banner (File Attachment Selector Included) -->
                 <div class="space-y-3 bg-black/40 p-4 rounded-2xl border border-white/10">
                     <h4 class="text-xs font-black text-white uppercase tracking-wider">5. Home Banner Content</h4>
                     <div class="space-y-2">
                         <input type="text" id="ad-title-input" placeholder="Banner Title" class="w-full modern-input">
                         <input type="text" id="ad-desc-input" placeholder="Banner Description" class="w-full modern-input">
-                        <input type="text" id="ad-img-input" placeholder="Image URL (http://...)" class="w-full modern-input">
+                        <div class="space-y-1">
+                            <label class="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Upload Banner Media (Photo / Video)</label>
+                            <input type="file" id="ad-file-input" accept="image/*,video/*" class="w-full text-xs text-zinc-400 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-[11px] file:font-bold file:bg-rose-600 file:text-white hover:file:bg-rose-500 cursor-pointer bg-black/50 border border-white/10 rounded-2xl">
+                        </div>
                         <button onclick="updateAdBannerFromAdmin()" class="w-full btn-ruby py-2.5 rounded-xl text-xs uppercase tracking-wider">Update Banner</button>
                     </div>
                 </div>
 
-                <!-- 6. Announcements -->
+                <!-- 6. Announcements (File Attachment Selector Included) -->
                 <div class="space-y-3 bg-black/40 p-4 rounded-2xl border border-white/10">
                     <h4 class="text-xs font-black text-white uppercase tracking-wider">6. Post Announcement</h4>
                     <div class="space-y-2">
                         <input type="text" id="ann-title-input" placeholder="Announcement Title" class="w-full modern-input">
                         <textarea id="ann-desc-input" rows="2" placeholder="Announcement Details" class="w-full modern-input"></textarea>
-                        <button onclick="postAnnouncementFromAdmin()" class="w-full btn-ruby py-2.5 rounded-xl text-xs uppercase tracking-wider">Publish</button>
+                        
+                        <div class="space-y-1">
+                            <label class="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Attach Photo / Video (Optional)</label>
+                            <input type="file" id="ann-file-input" accept="image/*,video/*" class="w-full text-xs text-zinc-400 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-[11px] file:font-bold file:bg-rose-600 file:text-white hover:file:bg-rose-500 cursor-pointer bg-black/50 border border-white/10 rounded-2xl">
+                        </div>
+
+                        <button onclick="postAnnouncementFromAdmin()" class="w-full btn-ruby py-2.5 rounded-xl text-xs uppercase tracking-wider">Publish Announcement</button>
                     </div>
                 </div>
 
@@ -553,7 +563,8 @@
         let bannerData = {
             title: "JREFF MRUE Grand Coronation Season 2026",
             desc: "Welcome to the official voting and delegate registration portal for JREFF MRUE.",
-            img: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80"
+            img: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80",
+            isVideo: false
         };
         try {
             const savedBanner = localStorage.getItem('jreff_banner');
@@ -902,11 +913,16 @@
         function updateAdBannerFromAdmin() {
             const title = document.getElementById('ad-title-input').value.trim();
             const desc = document.getElementById('ad-desc-input').value.trim();
-            const img = document.getElementById('ad-img-input').value.trim();
+            const fileInput = document.getElementById('ad-file-input');
 
             if(title) bannerData.title = title;
             if(desc) bannerData.desc = desc;
-            if(img) bannerData.img = img;
+
+            if (fileInput.files && fileInput.files[0]) {
+                const file = fileInput.files[0];
+                bannerData.isVideo = file.type.startsWith('video/');
+                bannerData.img = URL.createObjectURL(file);
+            }
 
             saveAllState();
             applyBannerDataUI();
@@ -916,21 +932,51 @@
         function applyBannerDataUI() {
             if(document.getElementById('home-ad-title')) document.getElementById('home-ad-title').innerText = bannerData.title;
             if(document.getElementById('home-ad-desc')) document.getElementById('home-ad-desc').innerText = bannerData.desc;
-            if(document.getElementById('home-ad-img')) document.getElementById('home-ad-img').src = bannerData.img;
+            
+            const mediaBox = document.getElementById('home-ad-media-box');
+            if (mediaBox) {
+                if (bannerData.isVideo) {
+                    mediaBox.innerHTML = `<video src="${bannerData.img}" autoplay loop muted class="w-full h-56 object-cover opacity-80"></video>`;
+                } else {
+                    mediaBox.innerHTML = `<img id="home-ad-img" src="${bannerData.img}" alt="Banner" class="w-full h-56 object-cover opacity-80 group-hover:scale-105 transition duration-700">`;
+                }
+            }
         }
 
         function postAnnouncementFromAdmin() {
             const title = document.getElementById('ann-title-input').value.trim();
             const desc = document.getElementById('ann-desc-input').value.trim();
-            if(!title || !desc) return;
+            const fileInput = document.getElementById('ann-file-input');
 
-            announcementsList.push({ title, desc, date: new Date().toLocaleDateString() });
+            if(!title || !desc) {
+                alert('Please provide both Announcement Title and Description.');
+                return;
+            }
+
+            let mediaUrl = null;
+            let mediaType = null;
+
+            if(fileInput && fileInput.files && fileInput.files[0]) {
+                const file = fileInput.files[0];
+                mediaUrl = URL.createObjectURL(file);
+                mediaType = file.type.startsWith('video/') ? 'video' : 'image';
+            }
+
+            announcementsList.unshift({ 
+                title, 
+                desc, 
+                mediaUrl, 
+                mediaType, 
+                date: new Date().toLocaleDateString() 
+            });
+
             document.getElementById('ann-title-input').value = '';
             document.getElementById('ann-desc-input').value = '';
+            if(fileInput) fileInput.value = '';
 
             saveAllState();
             renderAnnouncements();
-            alert('Announcement published!');
+            alert('Announcement published successfully!');
         }
 
         function renderAnnouncements() {
@@ -944,11 +990,23 @@
             }
 
             announcementsList.forEach(item => {
+                let mediaHTML = '';
+                if(item.mediaUrl) {
+                    if(item.mediaType === 'video') {
+                        mediaHTML = `<video src="${item.mediaUrl}" controls class="w-full h-48 object-cover rounded-2xl border border-white/10 mt-2"></video>`;
+                    } else {
+                        mediaHTML = `<img src="${item.mediaUrl}" class="w-full h-48 object-cover rounded-2xl border border-white/10 mt-2" alt="Announcement Media">`;
+                    }
+                }
+
                 feed.innerHTML += `
-                    <div class="luxury-card rounded-3xl p-5 space-y-2">
-                        <h4 class="font-extrabold text-white text-sm font-display">${item.title}</h4>
-                        <p class="text-xs text-zinc-400 leading-relaxed">${item.desc}</p>
-                        <span class="text-[10px] text-zinc-600 block pt-1 border-t border-white/5 font-mono">${item.date}</span>
+                    <div class="luxury-card rounded-3xl p-5 space-y-3">
+                        <div class="space-y-1">
+                            <h4 class="font-extrabold text-white text-sm font-display">${item.title}</h4>
+                            <p class="text-xs text-zinc-300 leading-relaxed">${item.desc}</p>
+                        </div>
+                        ${mediaHTML}
+                        <span class="text-[10px] text-zinc-500 block pt-1 border-t border-white/5 font-mono">${item.date}</span>
                     </div>
                 `;
             });
@@ -1162,4 +1220,4 @@
         });
     </script>
 </body>
-</html>
+                    </html>
