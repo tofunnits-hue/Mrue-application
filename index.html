@@ -31,6 +31,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Supabase JS Client CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <style>
         body {
             background-color: #050508;
@@ -157,7 +161,6 @@
         <!-- 1. HOME SECTION -->
         <section id="sec-home" class="space-y-5">
             <div class="relative rounded-3xl overflow-hidden luxury-card border border-white/10 group">
-                <!-- Banner Media Container (Image or Video) -->
                 <div id="home-ad-media-box">
                     <img id="home-ad-img" src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80" alt="Banner" class="w-full h-56 object-cover opacity-80 group-hover:scale-105 transition duration-700">
                 </div>
@@ -236,8 +239,8 @@
                 </div>
 
                 <div class="space-y-1">
-                    <label class="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Official Headshot Image</label>
-                    <input type="file" id="app-file" required accept="image/*" class="w-full text-xs text-zinc-400 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-[11px] file:font-bold file:bg-rose-600 file:text-white hover:file:bg-rose-500 cursor-pointer bg-black/50 border border-white/10 rounded-2xl">
+                    <label class="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Official Headshot Image Link (URL)</label>
+                    <input type="url" id="app-image-url" required placeholder="https://example.com/photo.jpg" class="w-full modern-input">
                 </div>
 
                 <button type="submit" class="w-full btn-ruby py-3.5 rounded-2xl text-xs uppercase tracking-widest transition mt-2">
@@ -492,114 +495,110 @@
                     </div>
                 </div>
 
-                <!-- 5. Home Banner (File Attachment Selector Included) -->
+                <!-- 5. Home Banner -->
                 <div class="space-y-3 bg-black/40 p-4 rounded-2xl border border-white/10">
                     <h4 class="text-xs font-black text-white uppercase tracking-wider">5. Home Banner Content</h4>
                     <div class="space-y-2">
                         <input type="text" id="ad-title-input" placeholder="Banner Title" class="w-full modern-input">
                         <input type="text" id="ad-desc-input" placeholder="Banner Description" class="w-full modern-input">
-                        <div class="space-y-1">
-                            <label class="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Upload Banner Media (Photo / Video)</label>
-                            <input type="file" id="ad-file-input" accept="image/*,video/*" class="w-full text-xs text-zinc-400 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-[11px] file:font-bold file:bg-rose-600 file:text-white hover:file:bg-rose-500 cursor-pointer bg-black/50 border border-white/10 rounded-2xl">
-                        </div>
+                        <input type="url" id="ad-img-url-input" placeholder="Banner Image URL" class="w-full modern-input">
                         <button onclick="updateAdBannerFromAdmin()" class="w-full btn-ruby py-2.5 rounded-xl text-xs uppercase tracking-wider">Update Banner</button>
                     </div>
                 </div>
 
-                <!-- 6. Announcements (File Attachment Selector Included) -->
+                <!-- 6. Announcements -->
                 <div class="space-y-3 bg-black/40 p-4 rounded-2xl border border-white/10">
                     <h4 class="text-xs font-black text-white uppercase tracking-wider">6. Post Announcement</h4>
                     <div class="space-y-2">
                         <input type="text" id="ann-title-input" placeholder="Announcement Title" class="w-full modern-input">
                         <textarea id="ann-desc-input" rows="2" placeholder="Announcement Details" class="w-full modern-input"></textarea>
-                        
-                        <div class="space-y-1">
-                            <label class="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Attach Photo / Video (Optional)</label>
-                            <input type="file" id="ann-file-input" accept="image/*,video/*" class="w-full text-xs text-zinc-400 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-[11px] file:font-bold file:bg-rose-600 file:text-white hover:file:bg-rose-500 cursor-pointer bg-black/50 border border-white/10 rounded-2xl">
-                        </div>
-
+                        <input type="url" id="ann-media-url-input" placeholder="Media/Photo URL (Optional)" class="w-full modern-input">
                         <button onclick="postAnnouncementFromAdmin()" class="w-full btn-ruby py-2.5 rounded-xl text-xs uppercase tracking-wider">Publish Announcement</button>
                     </div>
-                </div>
-
-                <!-- 7. RESET SYSTEM DATA -->
-                <div class="pt-2 border-t border-white/10">
-                    <button onclick="resetSystemData()" class="w-full bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800/40 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition">
-                        <i class="fa-solid fa-triangle-exclamation mr-1"></i> Reset All Data to Default
-                    </button>
                 </div>
 
             </div>
         </div>
     </div>
 
-    <!-- JAVASCRIPT MASTER SYSTEM -->
+    <!-- JAVASCRIPT SUPABASE INTEGRATION -->
     <script>
-        const defaultCountries = [
-            { name: "PHILIPPINES", locked: false, applicant: null },
-            { name: "CHINA", locked: false, applicant: null },
-            { name: "JAPAN", locked: false, applicant: null },
-            { name: "KOREA", locked: false, applicant: null }
-        ];
-
-        let countriesList = defaultCountries;
-        try {
-            const savedCountries = localStorage.getItem('jreff_countries');
-            if (savedCountries) countriesList = JSON.parse(savedCountries);
-        } catch(e) { countriesList = defaultCountries; }
-
-        let applicantsList = [];
-        try { applicantsList = JSON.parse(localStorage.getItem('jreff_applicants')) || []; } catch(e) {}
-
-        let candidatesList = [];
-        try { candidatesList = JSON.parse(localStorage.getItem('jreff_candidates')) || []; } catch(e) {}
-
-        let announcementsList = [];
-        try { announcementsList = JSON.parse(localStorage.getItem('jreff_announcements')) || []; } catch(e) {}
-
-        let calendarEventsList = [];
-        try { calendarEventsList = JSON.parse(localStorage.getItem('jreff_calendar_events')) || []; } catch(e) {}
-
-        let bannerData = {
-            title: "JREFF MRUE Grand Coronation Season 2026",
-            desc: "Welcome to the official voting and delegate registration portal for JREFF MRUE.",
-            img: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80",
-            isVideo: false
-        };
-        try {
-            const savedBanner = localStorage.getItem('jreff_banner');
-            if (savedBanner) bannerData = JSON.parse(savedBanner);
-        } catch(e) {}
-
-        let userHasVoted = { headshot: false, peoples: false };
-        try {
-            const savedVoted = localStorage.getItem('jreff_user_voted');
-            if (savedVoted) userHasVoted = JSON.parse(savedVoted);
-        } catch(e) {}
-
-        let votingCloseTimestamp = (Date.now() + 10 * 24 * 60 * 60 * 1000);
-        try {
-            const savedTimer = localStorage.getItem('jreff_voting_timer');
-            if (savedTimer) votingCloseTimestamp = parseInt(savedTimer);
-        } catch(e) {}
+        // Nakalagay na ang iyong Supabase URL at Anon Key rito!
+        const SUPABASE_URL = 'https://mgpogqbswxxmanypvoiy.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ncG9ncWJzd3h4bWFueXB2b2l5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAxNzMyNzcsImV4cCI6MjA1NTc0OTI3N30.i9u3Nf7i7TkyW1rQe3129E572E19b352932E';
+        
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         const ADMIN_SECRET_HANDLE = "g47608079@gmail.com";
 
-        function saveAllState() {
-            try {
-                localStorage.setItem('jreff_countries', JSON.stringify(countriesList));
-                localStorage.setItem('jreff_applicants', JSON.stringify(applicantsList));
-                localStorage.setItem('jreff_candidates', JSON.stringify(candidatesList));
-                localStorage.setItem('jreff_announcements', JSON.stringify(announcementsList));
-                localStorage.setItem('jreff_calendar_events', JSON.stringify(calendarEventsList));
-                localStorage.setItem('jreff_banner', JSON.stringify(bannerData));
-                localStorage.setItem('jreff_user_voted', JSON.stringify(userHasVoted));
-                localStorage.setItem('jreff_voting_timer', votingCloseTimestamp.toString());
-            } catch(e) {}
-        }
+        let countriesList = [];
+        let applicantsList = [];
+        let candidatesList = [];
+        let announcementsList = [];
+        let calendarEventsList = [];
+        let bannerData = {
+            title: "JREFF MRUE Grand Coronation Season 2026",
+            desc: "Welcome to the official voting and delegate registration portal for JREFF MRUE.",
+            img: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80"
+        };
+        let votingCloseTimestamp = Date.now() + 10 * 24 * 60 * 60 * 1000;
+        let userHasVoted = { headshot: false, peoples: false };
 
         let activeCatalog = 'headshot';
         let currentCalendarDate = new Date();
+        let activeSelectedCountry = null;
+        let selectedCountryId = null;
+
+        async function fetchAllData() {
+            try {
+                // 1. Countries
+                const { data: countries } = await supabaseClient.from('countries').select('*');
+                countriesList = countries || [];
+                if(countriesList.length === 0) {
+                    const defaults = [
+                        { name: "PHILIPPINES", locked: false },
+                        { name: "CHINA", locked: false },
+                        { name: "JAPAN", locked: false },
+                        { name: "KOREA", locked: false }
+                    ];
+                    await supabaseClient.from('countries').insert(defaults);
+                    const { data: newCountries } = await supabaseClient.from('countries').select('*');
+                    countriesList = newCountries || [];
+                }
+                renderCountryGrid();
+                renderAdminDashboard();
+
+                // 2. Applicants
+                const { data: apps } = await supabaseClient.from('applicants').select('*');
+                applicantsList = apps || [];
+                renderAdminDashboard();
+
+                // 3. Candidates
+                const { data: cands } = await supabaseClient.from('candidates').select('*');
+                candidatesList = cands || [];
+                renderHeadshotsGallery();
+                renderVotingSection();
+
+                // 4. Announcements
+                const { data: anns } = await supabaseClient.from('announcements').select('*');
+                announcementsList = anns || [];
+                renderAnnouncements();
+
+                // 5. Calendar Events
+                const { data: evts } = await supabaseClient.from('calendarEvents').select('*');
+                calendarEventsList = evts || [];
+                renderCalendarMatrix();
+
+                // 6. Config
+                const { data: cfg } = await supabaseClient.from('portalConfig').select('*').single();
+                if(cfg) {
+                    if(cfg.banner) { bannerData = cfg.banner; applyBannerDataUI(); }
+                    if(cfg.votingCloseTimestamp) { votingCloseTimestamp = cfg.votingCloseTimestamp; }
+                }
+            } catch(e) {
+                console.error("Error fetching Supabase data:", e);
+            }
+        }
 
         function navigateTo(secId) {
             const sections = ['home', 'apply', 'announcements', 'calendar', 'headshots', 'vote', 'feedback'];
@@ -623,8 +622,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        let activeSelectedCountry = null;
-
         function renderCountryGrid() {
             const container = document.getElementById('country-buttons-grid');
             if (!container) return;
@@ -634,7 +631,7 @@
                 const isLocked = c.locked;
                 const btn = document.createElement('button');
                 btn.type = 'button';
-                btn.onclick = () => selectCountryForApp(c.name);
+                btn.onclick = () => selectCountryForApp(c.name, c.id);
                 btn.className = isLocked 
                     ? "p-4 rounded-2xl border border-white/5 bg-black/40 opacity-40 cursor-not-allowed flex items-center justify-between text-xs font-bold text-left text-zinc-600"
                     : "p-4 rounded-2xl luxury-card flex items-center justify-between text-xs font-bold text-left text-white hover:border-rose-500 transition";
@@ -649,18 +646,19 @@
             });
         }
 
-        function selectCountryForApp(countryName) {
+        function selectCountryForApp(countryName, countryId) {
             const country = countriesList.find(c => c.name === countryName);
             if(country && country.locked) {
                 alert(`The country ${countryName} is already locked!`);
                 return;
             }
             activeSelectedCountry = countryName;
+            selectedCountryId = countryId;
             document.getElementById('form-selected-badge').innerText = `Selected: ${countryName}`;
             document.getElementById('form-selected-badge').className = "text-[10px] bg-rose-600 text-white font-extrabold px-3 py-1 rounded-full";
         }
 
-        function handleApplicationSubmit(e) {
+        async function handleApplicationSubmit(e) {
             e.preventDefault();
             if(!activeSelectedCountry) {
                 alert('Please select an available country button first!');
@@ -671,40 +669,32 @@
             const email = document.getElementById('app-email').value.trim();
             const discord = document.getElementById('app-discord').value.trim();
             const roblox = document.getElementById('app-roblox').value.trim();
-            const fileInput = document.getElementById('app-file');
+            const imageUrl = document.getElementById('app-image-url').value.trim();
 
-            let imageUrl = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80";
-            if(fileInput.files && fileInput.files[0]) {
-                imageUrl = URL.createObjectURL(fileInput.files[0]);
-            }
-
-            const targetCountry = countriesList.find(c => c.name === activeSelectedCountry);
-            if(targetCountry) {
-                targetCountry.locked = true;
-                targetCountry.applicant = candidateName;
-            }
-
-            const appData = {
-                id: Date.now(),
+            const { error } = await supabaseClient.from('applicants').insert([{
                 candidateName,
                 country: activeSelectedCountry,
                 email,
                 discord,
                 roblox,
                 imageUrl
-            };
-            applicantsList.push(appData);
+            }]);
+
+            if(error) {
+                alert("Error: " + error.message);
+                return;
+            }
+
+            // Lock the country
+            await supabaseClient.from('countries').update({ locked: true, applicant: candidateName }).eq('id', selectedCountryId);
 
             document.getElementById('application-form').reset();
             activeSelectedCountry = null;
             document.getElementById('form-selected-badge').innerText = "No Country Selected";
             document.getElementById('form-selected-badge').className = "text-[10px] bg-white/5 text-zinc-400 px-3 py-1 rounded-full border border-white/10 font-mono";
 
-            saveAllState();
-            renderCountryGrid();
-            renderAdminDashboard();
-
-            alert(`Application submitted successfully! ${appData.country} is now locked.`);
+            alert(`Application submitted successfully!`);
+            fetchAllData();
         }
 
         function openAdminModal() {
@@ -731,11 +721,11 @@
             document.getElementById('admin-country-count').innerText = `${countriesList.length} Total`;
             countryContainer.innerHTML = '';
 
-            countriesList.forEach((c, idx) => {
+            countriesList.forEach((c) => {
                 countryContainer.innerHTML += `
                     <div class="flex justify-between items-center bg-black/50 p-3 rounded-xl border border-white/10 text-xs">
                         <span class="font-bold text-white">${c.name} ${c.locked ? '<span class="text-[9px] text-rose-400">(Locked)</span>' : ''}</span>
-                        <button onclick="removeCountryFromAdmin(${idx})" class="text-zinc-500 hover:text-white"><i class="fa-solid fa-trash-can"></i></button>
+                        <button onclick="removeCountryFromAdmin(${c.id})" class="text-zinc-500 hover:text-white"><i class="fa-solid fa-trash-can"></i></button>
                     </div>
                 `;
             });
@@ -752,231 +742,109 @@
                         <div class="bg-black/50 p-3 rounded-xl space-y-2 border border-white/10">
                             <div class="flex justify-between items-center">
                                 <span class="font-bold text-white">${app.candidateName} (${app.country})</span>
-                                <button onclick="approveCandidate(${app.id})" class="text-[10px] bg-rose-600 text-white font-extrabold px-2.5 py-1 rounded-full">Approve Candidate</button>
+                                <button onclick="approveCandidate('${app.candidateName}', '${app.country}', '${app.imageUrl}')" class="text-[10px] bg-rose-600 text-white font-extrabold px-2.5 py-1 rounded-full">Approve Candidate</button>
                             </div>
-                            <div class="text-[10px] text-zinc-400">Email: ${app.email} | Discord: ${app.discord} | Roblox: ${app.roblox}</div>
+                            <div class="text-[10px] text-zinc-400">Email: ${app.email} | Discord: ${app.discord}</div>
                         </div>
                     `;
                 });
             }
         }
 
-        function addCountryFromAdmin() {
+        async function addCountryFromAdmin() {
             const input = document.getElementById('new-country-name');
             const name = input.value.trim().toUpperCase();
             if(!name) return;
-            countriesList.push({ name, locked: false, applicant: null });
+            await supabaseClient.from('countries').insert([{ name, locked: false }]);
             input.value = '';
-            saveAllState();
-            renderCountryGrid();
-            renderAdminDashboard();
+            fetchAllData();
         }
 
-        function removeCountryFromAdmin(index) {
-            countriesList.splice(index, 1);
-            saveAllState();
-            renderCountryGrid();
-            renderAdminDashboard();
+        async function removeCountryFromAdmin(id) {
+            await supabaseClient.from('countries').delete().eq('id', id);
+            fetchAllData();
         }
 
-        function approveCandidate(appId) {
-            const app = applicantsList.find(a => a.id === appId);
-            if(!app) return;
-
-            candidatesList.push({
-                id: app.id,
-                name: app.candidateName,
-                country: app.country,
-                imageUrl: app.imageUrl,
+        async function approveCandidate(name, country, imageUrl) {
+            await supabaseClient.from('candidates').insert([{
+                name,
+                country,
+                imageUrl,
                 votes: { headshot: 0, peoples: 0 }
-            });
-
-            saveAllState();
-            renderHeadshotsGallery();
-            renderVotingSection();
-            alert(`Approved ${app.candidateName} (${app.country}) as official candidate!`);
+            }]);
+            alert(`Approved ${name} (${country}) as official candidate!`);
+            fetchAllData();
         }
 
-        function saveVotingTimerFromAdmin() {
+        async function saveVotingTimerFromAdmin() {
             const dateVal = document.getElementById('admin-timer-date').value;
             const timeVal = document.getElementById('admin-timer-time').value;
             if(!dateVal || !timeVal) {
                 alert('Please select both date and time.');
                 return;
             }
-            votingCloseTimestamp = new Date(`${dateVal}T${timeVal}`).getTime();
-            saveAllState();
+            const newTimestamp = new Date(`${dateVal}T${timeVal}`).getTime();
+            await supabaseClient.from('portalConfig').upsert({ id: 1, votingCloseTimestamp: newTimestamp });
             alert('Voting schedule saved!');
+            fetchAllData();
         }
 
-        function addCalendarEventFromAdmin() {
+        async function addCalendarEventFromAdmin() {
             const title = document.getElementById('event-title-input').value.trim();
             const desc = document.getElementById('event-desc-input').value.trim();
             const date = document.getElementById('event-date-input').value;
-
             if(!title || !date) return;
 
-            calendarEventsList.push({ title, desc, date });
+            await supabaseClient.from('calendarEvents').insert([{ title, desc, date }]);
             document.getElementById('event-title-input').value = '';
             document.getElementById('event-desc-input').value = '';
             document.getElementById('event-date-input').value = '';
-
-            saveAllState();
-            renderCalendarMatrix();
             alert('Event added to calendar!');
+            fetchAllData();
         }
 
-        function changeCalendarMonth(delta) {
-            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + delta);
-            renderCalendarMatrix();
-        }
-
-        function renderCalendarMatrix() {
-            const year = currentCalendarDate.getFullYear();
-            const month = currentCalendarDate.getMonth();
-
-            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-            document.getElementById('calendar-month-header').innerText = `${monthNames[month]} ${year}`;
-
-            const firstDay = new Date(year, month, 1).getDay();
-            const totalDays = new Date(year, month + 1, 0).getDate();
-
-            let startOffset = (firstDay === 0) ? 6 : firstDay - 1;
-
-            const matrix = document.getElementById('calendar-days-grid');
-            if (!matrix) return;
-            matrix.innerHTML = '';
-
-            for(let i = 0; i < startOffset; i++) {
-                const emptySpan = document.createElement('div');
-                emptySpan.className = "p-3 text-zinc-800 text-[11px]";
-                matrix.appendChild(emptySpan);
-            }
-
-            for(let day = 1; day <= totalDays; day++) {
-                const monthFormatted = (month + 1) < 10 ? `0${month + 1}` : (month + 1);
-                const dayFormatted = day < 10 ? `0${day}` : day;
-                const fullDateStr = `${year}-${monthFormatted}-${dayFormatted}`;
-
-                const eventForDay = calendarEventsList.find(e => e.date === fullDateStr);
-
-                const div = document.createElement('div');
-                div.className = eventForDay
-                    ? "p-3 bg-rose-600 text-white font-black rounded-2xl cursor-pointer shadow-md text-xs hover:bg-rose-500 transition text-center"
-                    : "p-3 luxury-card hover:bg-white/10 text-zinc-300 font-medium rounded-2xl cursor-pointer text-xs transition text-center";
-
-                div.innerText = day;
-
-                div.onclick = () => {
-                    if(eventForDay) {
-                        openCalendarModal(eventForDay.title, eventForDay.desc, `${monthNames[month]} ${day}, ${year}`);
-                    } else {
-                        openCalendarModal(`Date Selected: ${monthNames[month]} ${day}, ${year}`, 'No official pageant events scheduled for this day.', `${monthNames[month]} ${day}, ${year}`);
-                    }
-                };
-
-                matrix.appendChild(div);
-            }
-
-            renderCalendarEventsTimeline();
-        }
-
-        function renderCalendarEventsTimeline() {
-            const container = document.getElementById('calendar-events-timeline');
-            if(!container) return;
-            container.innerHTML = '';
-
-            const year = currentCalendarDate.getFullYear();
-            const month = currentCalendarDate.getMonth() + 1;
-            const monthFormatted = month < 10 ? `0${month}` : month;
-
-            const currentMonthEvents = calendarEventsList.filter(e => e.date && e.date.startsWith(`${year}-${monthFormatted}`));
-
-            if(currentMonthEvents.length === 0) {
-                container.innerHTML = '<p class="text-xs text-zinc-600 italic py-2">No scheduled events added for this month.</p>';
-                return;
-            }
-
-            currentMonthEvents.forEach(ev => {
-                container.innerHTML += `
-                    <div class="luxury-card p-3.5 rounded-2xl flex justify-between items-center cursor-pointer" onclick="openCalendarModal('${ev.title}', '${ev.desc}', '${ev.date}')">
-                        <div>
-                            <h4 class="font-bold text-white text-xs">${ev.title}</h4>
-                            <p class="text-[10px] text-zinc-400">${ev.desc}</p>
-                        </div>
-                        <span class="text-[10px] bg-rose-950 text-rose-400 border border-rose-900/40 px-2.5 py-1 rounded-full font-mono">${ev.date}</span>
-                    </div>
-                `;
-            });
-        }
-
-        function updateAdBannerFromAdmin() {
+        async function updateAdBannerFromAdmin() {
             const title = document.getElementById('ad-title-input').value.trim();
             const desc = document.getElementById('ad-desc-input').value.trim();
-            const fileInput = document.getElementById('ad-file-input');
+            const img = document.getElementById('ad-img-url-input').value.trim();
 
             if(title) bannerData.title = title;
             if(desc) bannerData.desc = desc;
+            if(img) bannerData.img = img;
 
-            if (fileInput.files && fileInput.files[0]) {
-                const file = fileInput.files[0];
-                bannerData.isVideo = file.type.startsWith('video/');
-                bannerData.img = URL.createObjectURL(file);
-            }
-
-            saveAllState();
-            applyBannerDataUI();
+            await supabaseClient.from('portalConfig').upsert({ id: 1, banner: bannerData });
             alert('Home banner updated!');
+            fetchAllData();
         }
 
         function applyBannerDataUI() {
             if(document.getElementById('home-ad-title')) document.getElementById('home-ad-title').innerText = bannerData.title;
             if(document.getElementById('home-ad-desc')) document.getElementById('home-ad-desc').innerText = bannerData.desc;
-            
-            const mediaBox = document.getElementById('home-ad-media-box');
-            if (mediaBox) {
-                if (bannerData.isVideo) {
-                    mediaBox.innerHTML = `<video src="${bannerData.img}" autoplay loop muted class="w-full h-56 object-cover opacity-80"></video>`;
-                } else {
-                    mediaBox.innerHTML = `<img id="home-ad-img" src="${bannerData.img}" alt="Banner" class="w-full h-56 object-cover opacity-80 group-hover:scale-105 transition duration-700">`;
-                }
-            }
+            if(document.getElementById('home-ad-img')) document.getElementById('home-ad-img').src = bannerData.img;
         }
 
-        function postAnnouncementFromAdmin() {
+        async function postAnnouncementFromAdmin() {
             const title = document.getElementById('ann-title-input').value.trim();
             const desc = document.getElementById('ann-desc-input').value.trim();
-            const fileInput = document.getElementById('ann-file-input');
+            const mediaUrl = document.getElementById('ann-media-url-input').value.trim();
 
             if(!title || !desc) {
                 alert('Please provide both Announcement Title and Description.');
                 return;
             }
 
-            let mediaUrl = null;
-            let mediaType = null;
-
-            if(fileInput && fileInput.files && fileInput.files[0]) {
-                const file = fileInput.files[0];
-                mediaUrl = URL.createObjectURL(file);
-                mediaType = file.type.startsWith('video/') ? 'video' : 'image';
-            }
-
-            announcementsList.unshift({ 
-                title, 
-                desc, 
-                mediaUrl, 
-                mediaType, 
-                date: new Date().toLocaleDateString() 
-            });
+            await supabaseClient.from('announcements').insert([{
+                title,
+                desc,
+                mediaUrl: mediaUrl || null,
+                date: new Date().toLocaleDateString()
+            }]);
 
             document.getElementById('ann-title-input').value = '';
             document.getElementById('ann-desc-input').value = '';
-            if(fileInput) fileInput.value = '';
-
-            saveAllState();
-            renderAnnouncements();
+            document.getElementById('ann-media-url-input').value = '';
             alert('Announcement published successfully!');
+            fetchAllData();
         }
 
         function renderAnnouncements() {
@@ -990,15 +858,7 @@
             }
 
             announcementsList.forEach(item => {
-                let mediaHTML = '';
-                if(item.mediaUrl) {
-                    if(item.mediaType === 'video') {
-                        mediaHTML = `<video src="${item.mediaUrl}" controls class="w-full h-48 object-cover rounded-2xl border border-white/10 mt-2"></video>`;
-                    } else {
-                        mediaHTML = `<img src="${item.mediaUrl}" class="w-full h-48 object-cover rounded-2xl border border-white/10 mt-2" alt="Announcement Media">`;
-                    }
-                }
-
+                let mediaHTML = item.mediaUrl ? `<img src="${item.mediaUrl}" class="w-full h-48 object-cover rounded-2xl border border-white/10 mt-2" alt="Media">` : '';
                 feed.innerHTML += `
                     <div class="luxury-card rounded-3xl p-5 space-y-3">
                         <div class="space-y-1">
@@ -1080,7 +940,7 @@
                                 <h4 class="text-lg font-black text-white font-display">${cand.name}</h4>
                             </div>
                             <div class="flex items-center justify-between pt-2 border-t border-white/10">
-                                <span class="text-xs font-mono text-zinc-300"><span id="vote-count-${cand.id}" class="font-bold text-white">${currentVotes}</span> votes</span>
+                                <span class="text-xs font-mono text-zinc-300"><span class="font-bold text-white">${currentVotes}</span> votes</span>
                                 <button onclick="castVote(${cand.id})" ${isAlreadyVoted ? 'disabled' : ''} class="${isAlreadyVoted ? 'bg-zinc-800 text-zinc-500 cursor-not-allowed' : 'btn-ruby'} text-xs font-extrabold px-6 py-2.5 rounded-full transition">
                                     ${isAlreadyVoted ? 'VOTED' : 'VOTE NOW'}
                                 </button>
@@ -1093,7 +953,7 @@
             updateLeaderboardUI();
         }
 
-        function castVote(candId) {
+        async function castVote(candId) {
             if(userHasVoted[activeCatalog]) {
                 alert('Nakahandog ka na ng iyong boto sa kategoryang ito! Isang boto lamang bawat user.');
                 return;
@@ -1101,13 +961,13 @@
 
             const cand = candidatesList.find(c => c.id === candId);
             if(cand) {
-                if(!cand.votes) cand.votes = { headshot: 0, peoples: 0 };
-                cand.votes[activeCatalog] += 1;
-                userHasVoted[activeCatalog] = true;
+                let votes = cand.votes || { headshot: 0, peoples: 0 };
+                votes[activeCatalog] = (votes[activeCatalog] || 0) + 1;
 
-                saveAllState();
-                renderVotingSection();
-                alert(`Naitala na ang iyong boto para kay ${cand.name} sa ${activeCatalog === 'headshot' ? 'Headshot Vote' : "People's Choice"}!`);
+                await supabaseClient.from('candidates').update({ votes: votes }).eq('id', candId);
+                userHasVoted[activeCatalog] = true;
+                alert(`Naitala na ang iyong boto!`);
+                fetchAllData();
             }
         }
 
@@ -1185,15 +1045,91 @@
             if(homeTimer) homeTimer.innerText = `${days}d ${hours}h ${minutes}m`;
         }, 1000);
 
+        function changeCalendarMonth(delta) {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + delta);
+            renderCalendarMatrix();
+        }
+
+        function renderCalendarMatrix() {
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth();
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            document.getElementById('calendar-month-header').innerText = `${monthNames[month]} ${year}`;
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const totalDays = new Date(year, month + 1, 0).getDate();
+            let startOffset = (firstDay === 0) ? 6 : firstDay - 1;
+
+            const matrix = document.getElementById('calendar-days-grid');
+            if (!matrix) return;
+            matrix.innerHTML = '';
+
+            for(let i = 0; i < startOffset; i++) {
+                matrix.appendChild(Object.assign(document.createElement('div'), { className: "p-3 text-zinc-800 text-[11px]" }));
+            }
+
+            for(let day = 1; day <= totalDays; day++) {
+                const monthFormatted = (month + 1) < 10 ? `0${month + 1}` : (month + 1);
+                const dayFormatted = day < 10 ? `0${day}` : day;
+                const fullDateStr = `${year}-${monthFormatted}-${dayFormatted}`;
+
+                const eventForDay = calendarEventsList.find(e => e.date === fullDateStr);
+                const div = document.createElement('div');
+                div.className = eventForDay
+                    ? "p-3 bg-rose-600 text-white font-black rounded-2xl cursor-pointer shadow-md text-xs hover:bg-rose-500 transition text-center"
+                    : "p-3 luxury-card hover:bg-white/10 text-zinc-300 font-medium rounded-2xl cursor-pointer text-xs transition text-center";
+                div.innerText = day;
+                div.onclick = () => {
+                    if(eventForDay) {
+                        openCalendarModal(eventForDay.title, eventForDay.desc, `${monthNames[month]} ${day}, ${year}`);
+                    } else {
+                        openCalendarModal(`Date: ${monthNames[month]} ${day}, ${year}`, 'No official events scheduled.', `${monthNames[month]} ${day}, ${year}`);
+                    }
+                };
+                matrix.appendChild(div);
+            }
+            renderCalendarEventsTimeline();
+        }
+
+        function renderCalendarEventsTimeline() {
+            const container = document.getElementById('calendar-events-timeline');
+            if(!container) return;
+            container.innerHTML = '';
+
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth() + 1;
+            const monthFormatted = month < 10 ? `0${month}` : month;
+            const currentMonthEvents = calendarEventsList.filter(e => e.date && e.date.startsWith(`${year}-${monthFormatted}`));
+
+            if(currentMonthEvents.length === 0) {
+                container.innerHTML = '<p class="text-xs text-zinc-600 italic py-2">No scheduled events added for this month.</p>';
+                return;
+            }
+
+            currentMonthEvents.forEach(ev => {
+                container.innerHTML += `
+                    <div class="luxury-card p-3.5 rounded-2xl flex justify-between items-center cursor-pointer" onclick="openCalendarModal('${ev.title}', '${ev.desc}', '${ev.date}')">
+                        <div>
+                            <h4 class="font-bold text-white text-xs">${ev.title}</h4>
+                            <p class="text-[10px] text-zinc-400">${ev.desc}</p>
+                        </div>
+                        <span class="text-[10px] bg-rose-950 text-rose-400 border border-rose-900/40 px-2.5 py-1 rounded-full font-mono">${ev.date}</span>
+                    </div>
+                `;
+            });
+        }
+
         function openCalendarModal(title, desc, dateTime) {
             document.getElementById('modal-event-title').innerText = title;
             document.getElementById('modal-event-desc').innerText = desc;
             document.getElementById('modal-date-tag').innerText = dateTime;
+            document.getElementById('calendar-modal').classList.add('flex');
             document.getElementById('calendar-modal').classList.remove('hidden');
         }
 
         function closeCalendarModal() {
             document.getElementById('calendar-modal').classList.add('hidden');
+            document.getElementById('calendar-modal').classList.remove('flex');
         }
 
         function handleFeedbackSubmit(e) {
@@ -1202,22 +1138,10 @@
             document.getElementById('fb-message').value = '';
         }
 
-        function resetSystemData() {
-            if(confirm('Sigurado ka bang gusto mong ireset ang lahat ng saved data pabalik sa simula? Mawawala ang lahat ng kasalukuyang boto at aplikasyon.')) {
-                localStorage.clear();
-                location.reload();
-            }
-        }
-
         // DOM READY INITIALIZATION
         window.addEventListener('DOMContentLoaded', () => {
-            applyBannerDataUI();
-            renderCountryGrid();
-            renderCalendarMatrix();
-            renderAnnouncements();
-            renderHeadshotsGallery();
-            renderVotingSection();
+            fetchAllData();
         });
     </script>
 </body>
-                    </html>
+    </html>
